@@ -1,9 +1,10 @@
 <template>
-  <div ref="containerRef" class="docx-container"></div>
+  <el-button type="primary" v-if="file" @click="openDocxInNewTab">预览</el-button>
+  <!--  <div ref="containerRef" class="docx-container"></div>-->
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { renderAsync } from 'docx-preview'
 
 defineOptions({
@@ -33,15 +34,26 @@ const renderDocx = async (file: File) => {
   }
 }
 
-watch(
-  () => props.file,
-  (newFile: File) => {
-    if (newFile) {
-      renderDocx(newFile)
-    }
-  },
-  { immediate: true },
-)
+const openDocxInNewTab = async () => {
+  if (!props.file) {
+    console.warn('No file provided to render.')
+    return
+  }
+  const docWindow = window.open('', '_blank')
+  const container = document.createElement('div')
+
+  renderAsync(props.file, container)
+    .then(() => {
+      if (docWindow) {
+        // 将容器div添加到新窗口的body中
+        docWindow.document.body.appendChild(container)
+        docWindow.document.title = '文档预览'
+      }
+    })
+    .catch((err) => {
+      console.error('渲染docx失败:', err)
+    })
+}
 </script>
 
 <style lang="scss" scoped>
