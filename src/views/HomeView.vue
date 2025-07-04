@@ -1,5 +1,6 @@
 <template>
   <main>
+    <el-button type="primary">Go to Editor</el-button>
     <Editor />
   </main>
 </template>
