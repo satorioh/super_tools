@@ -6,6 +6,8 @@
     action=""
     :auto-upload="false"
     accept=".docx"
+    :limit="1"
+    :on-exceed="handleExceed"
     @change="handleChange"
   >
     <template #trigger>
@@ -16,7 +18,8 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import type { UploadInstance, UploadUserFile } from 'element-plus'
+import { genFileId } from 'element-plus'
+import type { UploadInstance, UploadUserFile, UploadProps, UploadRawFile } from 'element-plus'
 
 defineOptions({
   name: 'DocxUploader',
@@ -32,5 +35,12 @@ const fileList = ref<UploadUserFile[]>([])
 const handleChange = (file: UploadUserFile) => {
   console.log('File changed:', file)
   emit('change', file)
+}
+
+const handleExceed: UploadProps['onExceed'] = (files) => {
+  uploadRef.value!.clearFiles()
+  const file = files[0] as UploadRawFile
+  file.uid = genFileId()
+  uploadRef.value!.handleStart(file)
 }
 </script>
