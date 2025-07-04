@@ -2,12 +2,13 @@
   <el-upload
     ref="uploadRef"
     v-model:file-list="fileList"
-    class="upload-demo"
+    class="my-uploader"
     action=""
     :auto-upload="false"
     accept=".docx"
     :limit="1"
     :on-exceed="handleExceed"
+    :on-remove="handleRemove"
     @change="handleChange"
   >
     <template #trigger>
@@ -27,6 +28,7 @@ defineOptions({
 
 const emit = defineEmits<{
   (e: 'change', file: UploadUserFile): void
+  (e: 'remove'): void
 }>()
 
 const uploadRef = ref<UploadInstance>()
@@ -43,4 +45,16 @@ const handleExceed: UploadProps['onExceed'] = (files) => {
   file.uid = genFileId()
   uploadRef.value!.handleStart(file)
 }
+
+const handleRemove: UploadProps['onRemove'] = () => {
+  fileList.value = []
+  emit('remove')
+}
 </script>
+
+<style lang="scss" scoped>
+.my-uploader {
+  display: grid;
+  grid-template-columns: 140px 200px;
+}
+</style>

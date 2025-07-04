@@ -1,7 +1,9 @@
 <template>
-  <main>
-    <DocxUploader @change="handleFileChange" />
-    <DocxViewer :file="docxFile?.raw" />
+  <main class="home">
+    <div class="header">
+      <DocxUploader @change="handleFileChange" @remove="handleFileRemove" />
+      <DocxViewer :file="docxFile?.raw" />
+    </div>
   </main>
 </template>
 
@@ -16,4 +18,18 @@ const docxFile = ref<UploadUserFile | null>(null)
 const handleFileChange = (file: UploadUserFile) => {
   docxFile.value = file
 }
+
+const handleFileRemove = () => {
+  docxFile.value = null
+}
 </script>
+
+<style lang="scss" scoped>
+.home {
+  padding: 20px;
+  .header {
+    display: flex;
+    align-items: center;
+  }
+}
+</style>
