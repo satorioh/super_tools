@@ -1,0 +1,62 @@
+<template>
+  <div ref="containerRef" class="docx-container"></div>
+</template>
+
+<script setup lang="ts">
+import { ref, watch } from 'vue'
+import { renderAsync } from 'docx-preview'
+
+defineOptions({
+  name: 'DocxViewer',
+})
+
+const props = defineProps({
+  file: {
+    type: File,
+  },
+})
+
+const containerRef = ref<HTMLDivElement | null>(null)
+
+const renderDocx = async (file: File) => {
+  if (!containerRef.value) return
+
+  // 清空容器
+  containerRef.value.innerHTML = ''
+
+  try {
+    // 使用 docx-preview 渲染 DOCX 文件
+    await renderAsync(file, containerRef.value)
+  } catch (error) {
+    console.error('Error rendering DOCX file:', error)
+    containerRef.value.innerHTML = '<p>Error rendering document.</p>'
+  }
+}
+
+watch(
+  () => props.file,
+  (newFile: File) => {
+    if (newFile) {
+      renderDocx(newFile)
+    }
+  },
+  { immediate: true },
+)
+</script>
+
+<style lang="scss" scoped>
+.docx-container {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  padding: 20px;
+  box-sizing: border-box;
+
+  // docx-preview 的样式
+  .docx-preview {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+  }
+}
+</style>

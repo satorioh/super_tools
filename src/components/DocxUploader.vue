@@ -22,10 +22,15 @@ defineOptions({
   name: 'DocxUploader',
 })
 
+const emit = defineEmits<{
+  (e: 'change', file: UploadUserFile): void
+}>()
+
 const uploadRef = ref<UploadInstance>()
 const fileList = ref<UploadUserFile[]>([])
 
 const handleChange = (file: UploadUserFile) => {
-  console.log('File changed:', file.raw)
+  console.log('File changed:', file)
+  emit('change', file)
 }
 </script>
