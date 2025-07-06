@@ -5,6 +5,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import Editor from '@tinymce/tinymce-vue'
+import beautify from 'js-beautify'
 
 defineOptions({
   name: 'TinyEditor',
@@ -42,9 +43,15 @@ const editorConfig = {
       onAction: function () {
         if (!isSourceMode) {
           // 进入源码模式，保存原始 HTML 内容
-          originalContent = editor.getContent()
+          // 使用 js-beautify 对 HTML 内容进行格式化
+          const rawContent = editor.getContent()
+          const formatted = beautify.html(rawContent, {
+            indent_size: 2,
+            wrap_line_length: 100,
+            preserve_newlines: true,
+          })
           const encoded =
-            tinymce.util.Tools.resolve('tinymce.html.Entities').encodeAllRaw(originalContent)
+            tinymce.util.Tools.resolve('tinymce.html.Entities').encodeAllRaw(formatted)
           editor.setContent(
             `<pre id="tinymce-source-mode" style="white-space:pre-wrap;">${encoded}</pre>`,
           )
