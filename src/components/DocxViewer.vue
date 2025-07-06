@@ -1,5 +1,5 @@
 <template>
-  <el-button type="primary" text v-if="file" @click="openDocxInNewTab">预览</el-button>
+  <el-button type="primary" text v-if="file" @click="openDocxInNewTab">预览原始文件</el-button>
   <!--  <div ref="containerRef" class="docx-container"></div>-->
 </template>
 

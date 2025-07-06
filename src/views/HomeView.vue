@@ -4,7 +4,7 @@
       <DocxUploader @change="handleFileChange" @remove="handleFileRemove" />
       <DocxViewer :file="docxFile?.raw" />
     </div>
-    <div class="content">
+    <div class="content mt-4">
       <DocxConvert :file="docxFile?.raw" @converted="handleConverted" />
       <!--      <TipTapEditor v-model="htmlContent" />-->
       <TinyEditor v-model="htmlContent" />
